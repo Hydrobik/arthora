@@ -1,0 +1,10 @@
+# GitHub only holds the reminder job. The app is deployed from the Mac with `firebase deploy`.
+*
+!.gitignore
+!README.md
+!.github/
+!.github/workflows/
+!.github/workflows/reminder.yml
+!scripts/
+!scripts/reminder.mjs
+!scripts/package.json

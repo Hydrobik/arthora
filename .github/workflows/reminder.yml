@@ -1,0 +1,27 @@
+name: Daily expense reminder
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 min; the script decides who is due
+  workflow_dispatch: {}       # "Run workflow" button for testing
+permissions:
+  contents: read
+concurrency:
+  group: reminder
+  cancel-in-progress: false
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --omit=dev --no-audit --no-fund
+        working-directory: scripts
+      - run: node reminder.mjs
+        working-directory: scripts
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
+          VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
+          VAPID_CONTACT: ${{ secrets.VAPID_CONTACT }}
